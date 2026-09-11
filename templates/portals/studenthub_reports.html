@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}Student Learning Hub & Portal Operational Reports — EduFlow{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/portals/dashboard/">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'portals:studenthub_list' %}">Student Learning Hub & Portal</a></li>
+            <li class="breadcrumb-item active">Audit Reports</li>
+        </ol>
+    </nav>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="h3 fw-bold mb-1">Student Learning Hub & Portal Compliance & Audit Trail</h2>
+            <p class="text-muted mb-0">Immutable transaction logs and administrative mutation history.</p>
+        </div>
+        <a href="{% url 'portals:studenthub_list' %}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-1"></i> Back to Directory
+        </a>
+    </div>
+    <div class="card border-0 shadow-sm rounded-3">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Timestamp</th>
+                        <th>Action Type</th>
+                        <th>Actor</th>
+                        <th>Client IP</th>
+                        <th>Executive Change Summary</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for audit in audit_records %}
+                    <tr>
+                        <td class="small text-muted">{{ audit.timestamp|date:"M d, Y H:i:s" }}</td>
+                        <td><span class="badge bg-secondary font-monospace">{{ audit.action_type }}</span></td>
+                        <td class="fw-semibold">{{ audit.performed_by }}</td>
+                        <td class="font-monospace small">{{ audit.ip_address|default:"127.0.0.1" }}</td>
+                        <td>{{ audit.change_summary }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center py-5 text-muted">No audit mutations logged.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
