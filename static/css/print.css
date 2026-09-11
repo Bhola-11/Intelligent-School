@@ -1,0 +1,34 @@
+/* EduFlow Enterprise - Print Layout Stylesheet */
+@media print {
+    body {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        font-size: 11pt;
+    }
+    
+    .navbar, footer, .btn, .breadcrumb, .dropdown, .pagination {
+        display: none !important;
+    }
+    
+    .card {
+        box-shadow: none !important;
+        border: 1px solid #ccc !important;
+    }
+    
+    .table {
+        border-collapse: collapse !important;
+        width: 100% !important;
+    }
+    
+    .table th, .table td {
+        border: 1px solid #ddd !important;
+        padding: 6px !important;
+    }
+    
+    .report-card-header {
+        border-bottom: 2px solid #333;
+        padding-bottom: 15px;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+}

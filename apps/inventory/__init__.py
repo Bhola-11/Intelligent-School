@@ -1,0 +1,1 @@
+"""EduFlow Inventory Application Package."""

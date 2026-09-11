@@ -1,0 +1,43 @@
+/* EduFlow Enterprise - Dashboard UI Components */
+.kpi-card {
+    background: #ffffff;
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.kpi-icon {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.kpi-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--dark);
+    margin: 0;
+}
+
+.kpi-label {
+    font-size: 0.8125rem;
+    color: var(--secondary);
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.chart-container {
+    position: relative;
+    width: 100%;
+    min-height: 300px;
+    background: #ffffff;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+}
