@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}{{ record.name }} — EduFlow{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/portals/dashboard/">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'counseling:counselingcases_list' %}">Counseling Cases & Student Support Plans</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ record.code }}</li>
+        </ol>
+    </nav>
+
+    <!-- Header Title -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <div class="d-flex align-items-center gap-2 mb-1">
+                <span class="badge bg-primary font-monospace">{{ record.code }}</span>
+                <h2 class="h3 fw-bold mb-0">{{ record.name }}</h2>
+            </div>
+            <p class="text-muted mb-0">Tier: {{ record.tier }} | Scope: {{ record.scope }} | Category: {{ record.category }}</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="{% url 'counseling:counselingcases_add_item' record.pk %}" class="btn btn-outline-primary">
+                <i class="bi bi-plus me-1"></i> Add Component
+            </a>
+            <a href="{% url 'counseling:counselingcases_allocate' record.pk %}" class="btn btn-outline-success">
+                <i class="bi bi-person-check me-1"></i> Allocate Staff
+            </a>
+            <a href="{% url 'counseling:counselingcases_edit' record.pk %}" class="btn btn-warning">
+                <i class="bi bi-pencil me-1"></i> Edit Record
+            </a>
+            <a href="{% url 'counseling:counselingcases_list' %}" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-1"></i> Directory
+            </a>
+        </div>
+    </div>
+
+    <!-- Metadata Grid -->
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm rounded-3 mb-4">
+                <div class="card-header bg-transparent py-3 fw-bold">Overview & Operational Scope</div>
+                <div class="card-body">
+                    <p class="mb-4">{{ record.description|default:"No detailed description provided."|linebreaks }}</p>
+                    
+                    <h6 class="fw-bold mb-3">Capacity & Financial Breakdown</h6>
+                    <div class="p-3 bg-light rounded-3 mb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="fw-semibold">Occupancy / Utilization</span>
+                            <span class="fw-bold text-primary">{{ record.current_occupancy }} / {{ record.capacity }} ({{ record.utilization_rate }}%)</span>
+                        </div>
+                        <div class="progress" style="height: 10px;">
+                            <div class="progress-bar bg-primary" role="progressbar" style="width: {{ record.utilization_rate }}%"></div>
+                        </div>
+                        <div class="d-flex justify-content-between mt-2 small text-muted">
+                            <span>Remaining Capacity: {{ record.remaining_headroom }}</span>
+                            <span>Allocated Budget: ${{ record.budget_allocated|intcomma }}</span>
+                            <span>Incurred Cost: ${{ record.cost_incurred|intcomma }}</span>
+                            <span>Net Variance: ${{ record.net_budget_variance|intcomma }}</span>
+                        </div>
+                    </div>
+
+                    {% if items %}
+                    <h6 class="fw-bold mb-3 mt-4">Subordinate Line Items / Components</h6>
+                    <div class="table-responsive">
+                        <table class="table table-sm table-bordered">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Code</th>
+                                    <th>Title</th>
+                                    <th>Quantity</th>
+                                    <th>Unit Rate</th>
+                                    <th>Total ($)</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in items %}
+                                <tr>
+                                    <td class="font-monospace">{{ item.item_code }}</td>
+                                    <td>{{ item.title }}</td>
+                                    <td>{{ item.quantity }}</td>
+                                    <td>${{ item.unit_rate }}</td>
+                                    <td>${{ item.total_amount }}</td>
+                                    <td>
+                                        {% if item.is_completed %}
+                                        <span class="badge bg-success">Completed</span>
+                                        {% else %}
+                                        <span class="badge bg-secondary">Pending</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm rounded-3 mb-4">
+                <div class="card-header bg-transparent py-3 fw-bold">Operational Lifecycle</div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between px-0">
+                            <span class="text-muted">Status</span>
+                            <span class="badge bg-success">{{ record.get_status_display }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between px-0">
+                            <span class="text-muted">Priority</span>
+                            <span class="badge bg-secondary">{{ record.get_priority_display }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between px-0">
+                            <span class="text-muted">Tier</span>
+                            <span class="fw-semibold">{{ record.tier }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between px-0">
+                            <span class="text-muted">Start Date</span>
+                            <span class="fw-semibold">{{ record.effective_start_date|date:"M d, Y" }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between px-0">
+                            <span class="text-muted">End Date</span>
+                            <span class="fw-semibold">{{ record.effective_end_date|default:"Ongoing"|date:"M d, Y" }}</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            {% if allocations %}
+            <div class="card border-0 shadow-sm rounded-3 mb-4">
+                <div class="card-header bg-transparent py-3 fw-bold">Resource Allocations</div>
+                <div class="card-body p-0">
+                    <ul class="list-group list-group-flush">
+                        {% for alloc in allocations %}
+                        <li class="list-group-item px-3 py-2">
+                            <div class="fw-semibold">{{ alloc.assignee_name }}</div>
+                            <span class="badge bg-light text-dark border">{{ alloc.allocation_role }}</span>
+                            <span class="small text-muted ms-2">{{ alloc.start_time|date:"M d" }}</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
