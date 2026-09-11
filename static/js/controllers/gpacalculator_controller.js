@@ -314,6 +314,8 @@ class GPACalculatorOperationsController {
         try {
             const response = await fetch(this.apiBase + 'telemetry/');
             if (!response.ok) return;
+            const contentType = response.headers.get('content-type') || '';
+            if (!contentType.includes('application/json')) return;
             const stats = await response.json();
             this.updateMetricCard('total-count', stats.telemetry?.total_monitored_nodes || 0);
             this.updateMetricCard('active-count', stats.telemetry?.active_operational_nodes || 0);
@@ -357,7 +359,8 @@ class GPACalculatorOperationsController {
                     action: action
                 })
             });
-            const result = await response.json();
+            const contentType = response.headers.get('content-type') || '';
+            const result = contentType.includes('application/json') ? await response.json() : {};
             if (response.ok) {
                 this.showNotification('Successfully processed ' + (result.updated_count || this.selectedIds.size) + ' records.', 'success');
                 setTimeout(() => window.location.reload(), 800);
