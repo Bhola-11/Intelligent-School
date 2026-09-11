@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Subject Marks & Component Entry Register Documentation Vault — EduFlow{% endblock %}
+{% block content %}
+<div class="container-fluid py-4">
+    <h3 class="fw-bold mb-3">Subject Marks & Component Entry Register Document Attachments</h3>
+    <div class="card border-0 shadow-sm rounded-3 p-4">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Document Title</th>
+                    <th>File Path</th>
+                    <th>MIME Type</th>
+                    <th>Size (Bytes)</th>
+                    <th>Uploaded At</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for doc in attachments %}
+                <tr>
+                    <td class="fw-semibold">{{ doc.title }}</td>
+                    <td class="font-monospace small">{{ doc.file_path }}</td>
+                    <td>{{ doc.mime_type }}</td>
+                    <td>{{ doc.file_size_bytes }}</td>
+                    <td class="text-muted">{{ doc.uploaded_at|date:"M d, Y" }}</td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="5" class="text-center text-muted">No attachments uploaded.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
