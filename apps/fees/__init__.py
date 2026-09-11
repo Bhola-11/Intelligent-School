@@ -1,0 +1,1 @@
+"""EduFlow Fees Application Package."""
