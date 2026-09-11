@@ -1,0 +1,36 @@
+/* EduFlow Enterprise - Examination & Gradebook Styles */
+.hall-ticket {
+    border: 2px solid #0f172a;
+    border-radius: 0.5rem;
+    padding: 2rem;
+    background: #ffffff;
+    max-width: 800px;
+    margin: 0 auto;
+}
+.hall-ticket-header {
+    text-align: center;
+    border-bottom: 2px solid #0f172a;
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+}
+.seating-plan-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 0.75rem;
+    padding: 1.5rem;
+    background: #f8fafc;
+    border-radius: 0.5rem;
+    border: 1px dashed var(--border-color);
+}
+.desk-unit {
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 0.375rem;
+    padding: 0.75rem 0.5rem;
+    text-align: center;
+    font-size: 0.8rem;
+}
+.desk-occupied {
+    border-color: var(--primary);
+    background-color: #eff6ff;
+}
