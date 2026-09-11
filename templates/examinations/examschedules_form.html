@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Exam Schedules & Timetables — EduFlow{% endblock %}
+
+{% block content %}
+<div class="container py-4" style="max-width: 900px;">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="h3 fw-bold mb-1">{% if form.instance.pk %}Edit{% else %}Create{% endif %} ExamSchedules Record</h2>
+            <p class="text-muted mb-0">Exam Schedules & Timetables Form</p>
+        </div>
+        <a href="{% url 'examinations:examschedules_list' %}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-1"></i> Cancel
+        </a>
+    </div>
+
+    <div class="card border-0 shadow-sm rounded-3">
+        <div class="card-body p-4">
+            <form method="post" novalidate>
+                {% csrf_token %}
+                {% if form.non_field_errors %}
+                <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+                {% endif %}
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Code / Identifier <span class="text-danger">*</span></label>
+                        {{ form.code }}
+                        {% if form.code.errors %}<div class="text-danger small">{{ form.code.errors }}</div>{% endif %}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Title / Official Name <span class="text-danger">*</span></label>
+                        {{ form.name }}
+                        {% if form.name.errors %}<div class="text-danger small">{{ form.name.errors }}</div>{% endif %}
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Category</label>
+                        {{ form.category }}
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Operational Tier</label>
+                        {{ form.tier }}
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Jurisdiction Scope</label>
+                        {{ form.scope }}
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold">Priority</label>
+                        {{ form.priority }}
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold">Status</label>
+                        {{ form.status }}
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold">Capacity Limit</label>
+                        {{ form.capacity }}
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold">Current Occupancy</label>
+                        {{ form.current_occupancy }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Allocated Budget ($)</label>
+                        {{ form.budget_allocated }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Incurred Cost ($)</label>
+                        {{ form.cost_incurred }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Effective Start Date</label>
+                        {{ form.effective_start_date }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Effective End Date</label>
+                        {{ form.effective_end_date }}
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label fw-semibold">Description & Operational Scope</label>
+                        {{ form.description }}
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label fw-semibold">Operational Guidelines</label>
+                        {{ form.operational_guidelines }}
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label fw-semibold">Internal Administrative Notes</label>
+                        {{ form.internal_notes }}
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end gap-2 mt-4">
+                    <a href="{% url 'examinations:examschedules_list' %}" class="btn btn-light">Cancel</a>
+                    <button type="submit" class="btn btn-primary px-4">Save Record</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
