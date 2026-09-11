@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Book Copies, Barcodes & Shelf Tracking Governance Workflow — EduFlow{% endblock %}
+{% block content %}
+<div class="container-fluid py-4">
+    <h3 class="fw-bold mb-3">Book Copies, Barcodes & Shelf Tracking Approval Workflow</h3>
+    <div class="card border-0 shadow-sm rounded-3 p-4">
+        <p class="text-muted">Multi-stage review and approval history for institutional governance.</p>
+        <div class="timeline">
+            {% for item in workflow_transitions %}
+            <div class="border-start border-2 border-primary ps-3 mb-3">
+                <span class="badge bg-primary">{{ item.from_stage }} &rarr; {{ item.to_stage }}</span>
+                <span class="small text-muted ms-2">{{ item.transition_timestamp|date:"M d, Y H:i" }}</span>
+                <p class="mb-0 mt-1 fw-semibold">{{ item.actor_username }}: {{ item.approver_comments|default:"Approved" }}</p>
+            </div>
+            {% empty %}
+            <p class="text-muted">No workflow transitions recorded.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
