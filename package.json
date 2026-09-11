@@ -1,0 +1,14 @@
+{
+  "name": "eduflow-platform",
+  "version": "2.5.0",
+  "description": "Intelligent School & College Management Platform",
+  "private": true,
+  "scripts": {
+    "test": "pytest",
+    "coverage": "pytest --cov=apps"
+  },
+  "dependencies": {
+    "chart.js": "^4.4.0",
+    "flatpickr": "^4.6.13"
+  }
+}
