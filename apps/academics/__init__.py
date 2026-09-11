@@ -1,0 +1,1 @@
+"""EduFlow Academics Application Package."""
