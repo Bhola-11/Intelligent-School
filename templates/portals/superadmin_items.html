@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}Super Administrator Executive Portal Line Items — EduFlow{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/portals/dashboard/">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'portals:superadmin_list' %}">Super Administrator Executive Portal</a></li>
+            <li class="breadcrumb-item active">Components & Line Items</li>
+        </ol>
+    </nav>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="h3 fw-bold mb-1">Super Administrator Executive Portal Line Items</h2>
+            <p class="text-muted mb-0">Detailed breakdown of components, deliverables, and line items.</p>
+        </div>
+        <a href="{% url 'portals:superadmin_list' %}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-1"></i> Back to Directory
+        </a>
+    </div>
+    <div class="card border-0 shadow-sm rounded-3">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Item Code</th>
+                        <th>Title</th>
+                        <th>Quantity</th>
+                        <th>Unit Rate</th>
+                        <th>Total Amount</th>
+                        <th>Mandatory</th>
+                        <th>Status</th>
+                        <th>Completion Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                    <tr>
+                        <td class="font-monospace fw-bold text-primary">{{ item.item_code }}</td>
+                        <td>{{ item.title }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>${{ item.unit_rate }}</td>
+                        <td class="fw-semibold">${{ item.total_amount }}</td>
+                        <td>
+                            {% if item.is_mandatory %}
+                            <span class="badge bg-danger">Mandatory</span>
+                            {% else %}
+                            <span class="badge bg-light text-dark border">Elective</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if item.is_completed %}
+                            <span class="badge bg-success">Completed</span>
+                            {% else %}
+                            <span class="badge bg-secondary">Pending</span>
+                            {% endif %}
+                        </td>
+                        <td class="small text-muted">{{ item.completion_date|default:"-"|date:"M d, Y" }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="8" class="text-center py-5 text-muted">No line items recorded yet.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
