@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}Staff Leave Applications & Approval Workflows Operations Dashboard — EduFlow{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/portals/dashboard/">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'leaves:staffleaves_list' %}">Staff Leave Applications & Approval Workflows</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Operations Hub</li>
+        </ol>
+    </nav>
+
+    <!-- Header Banner -->
+    <div class="portal-header mb-4">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <span class="portal-role-badge mb-2 d-inline-block">Leaves Module</span>
+                <h1 class="h2 fw-bold mb-1">Staff Leave Applications & Approval Workflows Management Hub</h1>
+                <p class="mb-0 text-white-50">Real-time status indicators, capacity utilization, and operational KPIs.</p>
+            </div>
+            <div class="d-flex gap-2">
+                <a href="{% url 'leaves:staffleaves_create' %}" class="btn btn-light text-primary fw-bold">
+                    <i class="bi bi-plus-circle me-1"></i> New Entry
+                </a>
+                <a href="{% url 'leaves:staffleaves_list' %}" class="btn btn-outline-light">
+                    <i class="bi bi-table me-1"></i> Directory
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- KPI Metric Cards -->
+    <div class="portal-stat-grid mb-4">
+        <div class="portal-widget">
+            <div class="text-muted small text-uppercase fw-bold">Total Monitored</div>
+            <h2 class="fw-bold my-2 text-primary">{{ total_count|default:0|intcomma }}</h2>
+            <div class="small text-muted">Configured operational units</div>
+        </div>
+        <div class="portal-widget">
+            <div class="text-muted small text-uppercase fw-bold">Active Status</div>
+            <h2 class="fw-bold my-2 text-success">{{ active_count|default:0|intcomma }}</h2>
+            <div class="small text-success"><i class="bi bi-check-circle me-1"></i>Currently operational</div>
+        </div>
+        <div class="portal-widget">
+            <div class="text-muted small text-uppercase fw-bold">Aggregate Capacity</div>
+            <h2 class="fw-bold my-2 text-dark">{{ total_capacity|default:0|intcomma }}</h2>
+            <div class="small text-muted">{{ total_occupancy|default:0|intcomma }} occupied ({{ overall_util }}%)</div>
+        </div>
+        <div class="portal-widget">
+            <div class="text-muted small text-uppercase fw-bold">Budget Allocated</div>
+            <h2 class="fw-bold my-2 text-info">${{ total_budget|default:0|intcomma }}</h2>
+            <div class="small text-muted">${{ total_spent|default:0|intcomma }} expended</div>
+        </div>
+    </div>
+
+    <!-- Main Content Row -->
+    <div class="row g-4 mb-4">
+        <div class="col-lg-8">
+            <!-- Capacity Meter Card -->
+            <div class="card border-0 shadow-sm rounded-3 mb-4">
+                <div class="card-header bg-transparent py-3 fw-bold d-flex justify-content-between">
+                    <span>Capacity Headroom & Load Telemetry</span>
+                    <span class="badge bg-primary">{{ overall_util }}% Average</span>
+                </div>
+                <div class="card-body">
+                    <div class="progress mb-3" style="height: 16px;">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" 
+                             role="progressbar" style="width: {{ overall_util }}%">
+                            {{ overall_util }}%
+                        </div>
+                    </div>
+                    <div class="row text-center mt-3">
+                        <div class="col-4 border-end">
+                            <div class="text-muted small">Total Capacity</div>
+                            <div class="fw-bold fs-5">{{ total_capacity|intcomma }}</div>
+                        </div>
+                        <div class="col-4 border-end">
+                            <div class="text-muted small">In Use</div>
+                            <div class="fw-bold fs-5 text-primary">{{ total_occupancy|intcomma }}</div>
+                        </div>
+                        <div class="col-4">
+                            <div class="text-muted small">Buffer Headroom</div>
+                            <div class="fw-bold fs-5 text-success">{{ total_capacity|add:"-"|add:total_occupancy|intcomma }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Records Table -->
+            <div class="card border-0 shadow-sm rounded-3">
+                <div class="card-header bg-transparent py-3 fw-bold d-flex justify-content-between align-items-center">
+                    <span>Recent Staff Leave Applications & Approval Workflows Records</span>
+                    <a href="{% url 'leaves:staffleaves_list' %}" class="btn btn-sm btn-outline-primary">View All</a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Code</th>
+                                <th>Title</th>
+                                <th>Category</th>
+                                <th>Tier</th>
+                                <th>Status</th>
+                                <th class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for rec in recent_records %}
+                            <tr>
+                                <td class="font-monospace fw-bold text-primary">{{ rec.code }}</td>
+                                <td><a href="{% url 'leaves:staffleaves_detail' rec.pk %}" class="text-decoration-none text-dark fw-semibold">{{ rec.name }}</a></td>
+                                <td><span class="badge bg-light text-dark border">{{ rec.category }}</span></td>
+                                <td>{{ rec.tier }}</td>
+                                <td><span class="badge bg-success">{{ rec.status }}</span></td>
+                                <td class="text-end">
+                                    <a href="{% url 'leaves:staffleaves_detail' rec.pk %}" class="btn btn-sm btn-light">View</a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6" class="text-center py-4 text-muted">No records available.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar Activity Stream -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm rounded-3">
+                <div class="card-header bg-transparent py-3 fw-bold">
+                    <i class="bi bi-clock-history me-2"></i>Audit Trail Activity
+                </div>
+                <div class="card-body p-0">
+                    <ul class="list-group list-group-flush">
+                        {% for audit in audit_trail %}
+                        <li class="list-group-item px-3 py-2">
+                            <div class="d-flex justify-content-between">
+                                <span class="badge bg-secondary font-monospace">{{ audit.action_type }}</span>
+                                <span class="small text-muted">{{ audit.timestamp|timesince }} ago</span>
+                            </div>
+                            <div class="small mt-1 text-dark">{{ audit.change_summary }}</div>
+                            <div class="small text-muted">By: {{ audit.performed_by }}</div>
+                        </li>
+                        {% empty %}
+                        <li class="list-group-item py-3 text-center text-muted">No audit events recorded yet.</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
