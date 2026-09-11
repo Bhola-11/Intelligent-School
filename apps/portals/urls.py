@@ -8,6 +8,8 @@ except ImportError:
 app_name = 'portals'
 
 urlpatterns = [
+    path('', getattr(views, 'SuperAdminDashboardView', getattr(views, 'SuperAdminListView')).as_view(), name='dashboard_root'),
+    path('dashboard/', getattr(views, 'SuperAdminDashboardView', getattr(views, 'SuperAdminListView')).as_view(), name='dashboard'),
     path('superadmin/', getattr(views, 'SuperAdminListView').as_view(), name='superadmin_list'),
     path('superadmin/create/', getattr(views, 'SuperAdminCreateView').as_view(), name='superadmin_create'),
     path('superadmin/<int:pk>/', getattr(views, 'SuperAdminDetailView').as_view(), name='superadmin_detail'),
